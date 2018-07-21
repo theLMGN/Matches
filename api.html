@@ -1,0 +1,48 @@
+{
+    "downloading": $downloading$,
+    "seeding": $seeding$,
+    "peerconnectionsin": $peerconnections$,
+    "bps": {
+        "in": "$bpsin$",
+        "out": "$bpsout$"
+    },
+    "transferred": {
+        "totalbytesin": "$totalbytesin$",
+        "totalbytesout": "$totalbytesout$",
+        "filebytesin": "$filebytesin$",
+        "filebytesout": "$filebytesout$"
+    },
+    "uploadratio": "$uploadratio$",
+    "incoming": {
+        "port": $inc_port$,
+        "status": "$inc_status$",
+        "recieved": $inc_received$,
+        "negotiating": $inc_negotiating$,
+        "placed": $inc_placed$
+    },
+    "transfers": [
+        <!--list_start transfers-->
+        {
+            "name": "$name$",
+            "progress": $progress$,
+            "status": "$status$",
+            "eta": "$remaining_time$"
+        },
+    
+<!--list_end-->
+
+        null
+    ]
+
+    "matches": {
+        "info": "This Tixati server is running the Matches web interface.",
+        "dl": "https://matches.thelmgn.com",
+        "thanks":  {
+            "Tixati Team": "Duh", 
+            "ChaosJester": "MaterialTix which was a great inspriation and base for Matches",
+            "Jeremy Thomas": "Bulma"
+        },
+        "version": 0
+    }
+
+}
