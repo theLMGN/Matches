@@ -1,0 +1,90 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+<div id="thing">
+
+        <div class="row">
+                <div class="col s12 m6">
+                  <div class="card grey darken-4">
+                    <div class="card-content white-text">
+                      <span class="card-title">Transfers</span>
+                      Downloading <h3 id="downloading"><div class="loader"></div></h3>
+                      Seeding <h3 id="seed"><div class="loader"></div></h3>
+                      Bytes In <h3 id="filebytesin"><div class="loader"></div></h3>
+                      Bytes Out <h3 id="filebytesout"><div class="loader"></div></h3>
+                      Upload Ratio <h3 id="ulratio"><div class="loader"></div></h3>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col s12 m6">
+                        <div class="card grey darken-4">
+                          <div class="card-content white-text">
+                            <span class="card-title">Incoming</span>
+                            Status <h3 id="incomingstatus"><div class="loader"></div></h3>
+                            Peer Connections <h3 id="peerconnectionsin"><div class="loader"></div></h3>
+                            Negotiating <h3 id="negotiating"><div class="loader"></div></h3>
+                            Recieved <h3 id="Recieved"><div class="loader"></div></h3>
+                            Placed <h3 id="placed"><div class="loader"></div></h3>
+                            Port <h3 id="port"><div class="loader"></div></h3>
+                          </div>
+                        </div>
+                      </div>
+              </div>
+</div>
+<style>
+    body {
+        color: #fff;
+        font-family: "Segoe UI";
+
+    }
+    .loader {
+        border: 16px solid #444;
+        border-radius: 50%;
+        border-top: 16px solid #e64a19;
+        width: 16px;
+        height: 16px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+        z-index: 100000;
+        transition: 1s all;
+        display: inline-block;
+    }
+    h3 {
+        font-size: 2em;
+        margin-top: 0;
+    }
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+<script>
+    function xhr() {
+    var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+       var json = (JSON.parse(this.responseText))
+       document.querySelector("#seed").innerHTML = json.seeding
+       document.querySelector("#downloading").innerHTML = json.downloading
+       document.querySelector("#filebytesin").innerHTML = json.transferred.totalbytesin
+       document.querySelector("#filebytesout").innerHTML = json.transferred.totalbytesout
+       document.querySelector("#ulratio").innerHTML = json.uploadratio
+       document.querySelector("#incomingstatus").innerHTML = json.incoming.status
+       document.querySelector("#peerconnectionsin").innerHTML = json.peerconnectionsin
+       document.querySelector("#negotiating").innerHTML = json.incoming.negotiating
+       document.querySelector("#placed").innerHTML = json.incoming.placed
+       document.querySelector("#Recieved").innerHTML = json.incoming.recieved
+       document.querySelector("#port").innerHTML = json.incoming.port
+    }
+};
+xhttp.open("GET", "/api.html", true);
+xhttp.send();
+}
+setInterval(xhr,1000)
+</script>

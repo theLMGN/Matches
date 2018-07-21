@@ -1,0 +1,94 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+
+<div id="thing">
+
+        <div class="ccard">
+            <h1>Transfer Title</h1>
+            <p>Status</p>
+            <progress max="100" value="50" class="progress is-success"></progress>
+        </div>
+
+</div>
+<style>
+    body {
+        color: #fff;
+        font-family: "Segoe UI";
+        
+    }
+    .progress::-webkit-progress-bar {
+        background: transparent;
+    }
+    .progress {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 1em;
+        border-bottom-right-radius: 1em;
+    }
+    .ccard > p {
+        text-align: center;
+        margin-top: 0;
+        font-weight: 500;
+        font-size: 1.25em;
+    }
+    .ccard > h1 {
+        font-weight: 900;
+        margin-left: 0.5em;
+        margin-bottom: 0;
+    }
+    .ccard {
+        width: 95%;
+        margin-left: 2.5%;
+        border-radius: 1em;
+        background: #111111;
+        
+    }
+    .loader {
+        border: 16px solid #444;
+        border-radius: 50%;
+        border-top: 16px solid #e64a19;
+        width: 16px;
+        height: 16px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+        z-index: 100000;
+        transition: 1s all;
+        display: inline-block;
+    }
+    h3 {
+        font-size: 1.5em;
+        margin-top: 0;
+        text-align:center;
+    }
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+<script>
+    function xhr() {
+    var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+       var json = (JSON.parse(this.responseText))
+       json.transfers.forEach(transfer => {
+           if (transfer) {
+               if (document.querySelector("#transfer" + transfer.guid)) {
+                   console.log("yes")
+               } else {
+                   console.log("no")
+               }
+           }
+       });
+    }
+};
+xhttp.open("GET", "/api.html", true);
+xhttp.send();
+}
+setInterval(xhr,1000)
+</script>

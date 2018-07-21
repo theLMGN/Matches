@@ -1,0 +1,78 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div id="topbar" class="noBlur">
+    <a id="main-icon" href="/mhome.html" target="mainwindow" class="material-icons tb-icon tb-active">home</a>
+    <a id="transfer-icons" href="/mtransfers.html" target="mainwindow"  class="material-icons tb-icon">compare_arrows</a>
+    <a id="add-icons" href="/madd.html" target="mainwindow"  class="material-icons tb-icon">library_add</a>
+    <a id="graph-icons" href="/mgraphs.html" target="mainwindow"  class="material-icons tb-icon">multiline_chart</a>
+    <a id="settings-icons" href="/msettings.html" target="mainwindow"  class="material-icons tb-icon right-tb-icon">settings</a>
+</div>
+<iframe id="mainwindow" name="mainwindow" src="/mhome.html" frameBorder="0" border="https://wiki.teamfortress.com/w/images/5/58/Soldier_no03.wav">
+
+</iframe>
+
+<style>
+    .tb-active {
+        color: #e64a19 !important;
+    }
+    .tb-icon {
+        font-size: 4em;
+        color: #fff;
+        display: inline-block;
+        width: 1em;
+        -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+    }
+    .right-tb-button {
+        right: 0;
+        text-align:right;
+    }
+    #topbar {
+        height: 4em;
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    #topbar.noBlur {
+        background: #11111140;
+    }
+    #topbar.blur {
+        backdrop-filter: blur(0.5em) brightness(25%);
+        -webkit-backdrop-filter: blur(0.5em) brightness(25%);
+    }
+    #mainwindow {
+        background: #252525;
+        top: 4em;
+        height: calc(100% - 4em);
+        width: 100%;
+        left:0;
+        position: absolute;
+    }
+</style>
+<script>
+    
+    if (typeof(document.body.style.backdropFilter) == "string") {
+        console.log("browser supports backdrop filter, changing to blurred topbar")
+        document.querySelector("#topbar").className = "blur"
+    } else {
+        console.log("browser doesn't support backdrop filter, falling back to solid color")
+    }
+    function dothething(qs,pn) {
+        setInterval(function() {
+        document.querySelector(qs).className = "material-icons tb-icon"
+            if (document.querySelector("iframe").contentWindow.location.pathname == pn) {
+                document.querySelector(qs).className = "material-icons tb-icon tb-active"
+            }
+        },30)
+    }
+    dothething("#main-icon","/mhome.html")
+    dothething("#transfer-icons","/mtransfers.html")
+    dothething("#add-icons","/madd.html")
+    dothething("#graph-icons","/mgraphs.html")
+    dothething("#settings-icons","/msettings.html")
+</script>

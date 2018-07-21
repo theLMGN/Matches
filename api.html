@@ -16,23 +16,30 @@
     "incoming": {
         "port": $inc_port$,
         "status": "$inc_status$",
-        "recieved": $inc_received$,
-        "negotiating": $inc_negotiating$,
-        "placed": $inc_placed$
+        "recieved": "$inc_received$",
+        "negotiating": "$inc_negotiating$",
+        "placed": "$inc_placed$"
     },
     "transfers": [
         <!--list_start transfers-->
         {
+            "guid": "$guid$",
             "name": "$name$",
+            "bytes":"$bytes$",
             "progress": $progress$,
             "status": "$status$",
-            "eta": "$remaining_time$"
+            "bps": {
+                "in": "$bps_in$",
+                "out": "$bps_out$"
+            },
+            "priority": "$priority$",
+            "eta": "$remaining_time$",
+            "anothereta": "$timeleft$"
         },
     
 <!--list_end-->
-
         null
-    ]
+    ],
 
     "matches": {
         "info": "This Tixati server is running the Matches web interface.",
