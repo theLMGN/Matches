@@ -6,8 +6,12 @@
 <form method="post" action="/transfers/action" enctype="multipart/form-data">
     <input  type="file" name="metafile">
     <input type="submit" name="addmetafile" class="button is-dark"Value="Add"/>&nbsp;
-</form><p>
-I know this page is very basic</p>
+</form>
+
+<input type="text" id="searchbox" placeholder="TPB Search" class="input is-dark"></input><button onclick="search()" class="button is-dark">Search</button>
+<div id="searchContainer"><br><br><br></div>
+
+<p>I know this page is very basic</p>
 <style>
     html {
     background-color: transparent;
@@ -16,3 +20,43 @@ I know this page is very basic</p>
         color: #fff;
     }
 </style>
+
+<script>
+var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+function doCORSRequest(url, printResult) {
+    var x = new XMLHttpRequest();
+    x.open("GET", cors_api_url + url);
+    x.onload = x.onerror = function() {
+        printResult(x.responseText)
+        
+    };
+    x.send();
+}
+var magnets = []
+function search() {
+    document.querySelector("#searchContainer").innerHTML = `<a class="button is-large is-dark">Loading</a><a class="button is-large is-dark is-loading"></a>`
+    doCORSRequest(`https://thepiratebay.org/search/${document.querySelector("#searchbox").value}/0/99/0`, function(response) {
+        magnets = []
+        document.querySelector("#searchContainer").innerHTML = "<br><br><br>"
+        var html = document.createElement('html');
+        html.innerHTML = response
+        var results = html.querySelector("#searchResult > tbody")
+        var actualResults = results.querySelectorAll("tr")
+        var r = actualResults[0]
+        var i = 0
+        actualResults.forEach(function(r) {
+            var a = r.children
+            magnets.push(a[1].querySelectorAll("a")[1].href)
+            document.querySelector("#searchContainer").innerHTML = `${document.querySelector("#searchContainer").innerHTML} <a class="button is-large is-dark" href="javascript:setMagnet(${i})">${a[1].querySelector("div > a").innerText} (${a[2].innerText} Seeds, ${ a[3].innerText} Leaches, ${a[1].children[4].innerText})</a><br><br>`
+            i = magnets.length
+        })
+        
+    })
+}
+
+function setMagnet(magnet) {
+    
+    document.querySelector("body > form:nth-child(1) > input.input.is-dark").value = magnets[magnet]
+    document.querySelector("body > form:nth-child(1) > input.button.is-dark").click()
+}
+</script>
