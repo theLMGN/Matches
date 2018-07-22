@@ -1,0 +1,210 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div id="thing">
+
+        
+
+</div>
+<style>
+    body {
+        color: #fff;
+        font-family: "Segoe UI";
+        background: #252525;
+    }
+    html {
+        background: #252525;
+    }
+    .progress {
+        transition: 1s all;
+    }
+    .progress::-webkit-progress-bar {
+        background: transparent;
+    }
+    
+    .progress {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 1em;
+        border-bottom-right-radius: 1em;
+        border-bottom: 0;
+    }
+    .ccard > p {
+        text-align: center;
+        margin-top: 0;
+        font-weight: 500;
+        font-size: 1.25em;
+    }
+    .ccard > h1 {
+        font-weight: 900;
+        margin-left: 0.5em;
+        margin-bottom: 0;
+    }
+    .ccard {
+        width: 95%;
+        margin-left: 2.5%;
+        margin-top: 1em;
+        border-radius: 1em;
+        background: #111111;
+        
+    }
+    .loader {
+        border: 16px solid #444;
+        border-radius: 50%;
+        border-top: 16px solid #e64a19;
+        width: 16px;
+        height: 16px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+        z-index: 100000;
+        transition: 1s all;
+        display: inline-block;
+    }
+    h3 {
+        font-size: 1.5em;
+        margin-top: 0;
+        text-align:center;
+    }
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .progress.is-downloading::-webkit-progress-value{ 
+        transition: 1s all;
+    }
+    .is-fetching {
+        background-color:#ffdd5755;
+        animation-name: fetching;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+    }
+    @keyframes fetching {
+    0%   {background-color:#ffdd5755;}
+    50%  {background-color:#ffdd5777;}
+    100% {background-color:#ffdd5755;}
+}
+    .is-need,.is-prompting {
+        background-color:#ff386055;
+        animation-name: need;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+    }
+@keyframes need {
+    0%   {background-color:#ff386055;}
+    50%  {background-color:#ff386077;}
+    100% {background-color:#ff386055;}
+}
+    .progress.is-seeding::-webkit-progress-value{
+    background-color:#23d160
+}
+.progress.is-seeding::-moz-progress-bar{
+    background-color:#23d160
+}
+.progress.is-seeding::-ms-fill{
+    background-color:#23d160
+}
+.progress.is-downloading::-webkit-progress-value{
+    background-color:#ffdd57
+}
+.progress.is-downloading::-moz-progress-bar{
+    background-color:#ffdd57
+}
+.progress.is-downloading::-ms-fill{
+    background-color:#ffdd57
+}
+.progress.is-searching::-webkit-progress-value{
+    background-color:#ffdd5755
+}
+.progress.is-searching::-moz-progress-bar{
+    background-color:#ffdd5755
+}
+.progress.is-searching::-ms-fill{
+    background-color:#ffdd5755
+}
+.progress.is-offline::-webkit-progress-value{
+    background-color:#ff3860
+}
+.progress.is-offline::-moz-progress-bar{
+    background-color:#ff3860
+}
+.progress.is-offline::-ms-fill{
+    background-color:#ff3860
+}
+.progress.is-complete::-webkit-progress-value{
+    background-color:#ff3860
+}
+.progress.is-complete::-moz-progress-bar{
+    background-color:#ff3860
+}
+.progress.is-complete::-ms-fill{
+    background-color:#ff3860
+}
+.progress.is-file::-webkit-progress-value{
+    background-color:#ff3860
+}
+.progress.is-file::-moz-progress-bar{
+    background-color:#ff3860
+}
+.progress.is-file::-ms-fill{
+    background-color:#ff3860
+}
+    .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+<script>
+function xhr() {
+    function create(transfer) {
+        console.log(transfer)
+        document.querySelector("#thing").innerHTML =`${document.querySelector("#thing").innerHTML}
+        <div class="ccard" id="transfer${transfer.guid}">
+            <h1>${transfer.name}</h1>
+            <p>Loading...</p>
+            <progress max="100" value="${transfer.progress}" class="progress tooltip is-${transfer.status.split(" ")[0].toLowerCase()}"></progress>
+        </div>`
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+       var json = (JSON.parse(this.responseText))
+       json.transfers.forEach(transfer => {
+           if (transfer) {
+               if (document.querySelector("#transfer" + transfer.guid)) {
+                   document.querySelector("#transfer" + transfer.guid).querySelector("h1").innerText = transfer.name
+                   document.querySelector("#transfer" + transfer.guid).querySelector("p").innerHTML = `<span class="material-icons">info</span> ${transfer.status} | <i class="material-icons">storage</i>  ${transfer.bytes} | <i class="material-icons">keyboard_arrow_down</i> ${transfer.bps.in}bps <i class="material-icons">keyboard_arrow_up</i> ${transfer.bps.out}bps`
+                   document.querySelector("#transfer" + transfer.guid).querySelector("progress").value = transfer.progress
+                   document.querySelector("#transfer" + transfer.guid).querySelector("progress").className = `progress is-${transfer.status.split(" ")[0].toLowerCase()}`
+               } else {
+                   create(transfer)
+               }
+           }
+       });
+    }
+};
+xhttp.open("GET", "/api.html", true);
+xhttp.send();
+}
+xhr()
+setInterval(xhr,1000)
+</script>
+
+<!--list_start transfers-->
+<!--list_end-->

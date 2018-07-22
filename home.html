@@ -1,6 +1,22 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
 <div id="container">
     <div id="backdrop"></div>
-    <iframe id="matches" src="/matches" frameBorder="0" scrolling="no"></iframe>
+    <iframe id="matches" src="/matches" name="matches" frameBorder="0" scrolling="no"></iframe>
+    <div class="row">
+    <div class="col s12 m6" id="updateNotif">
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">Update available</span>
+                    You're running <span id="version"></span>, but you could be running <span id="newUpdate"></span>
+                </div>
+                <div class="card-action">
+                    <a href="#" onclick="hideUpdate()" id="zipUpdate">Download .zip</a>
+                    <a href="/matches#update" onclick="hideUpdate()" target="matches" id="magnetUpdate">Download torrent to this server</a>
+                    <a onclick="hideUpdate()" href="#">x</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="loader">
     <div class="loader"></div>
@@ -8,6 +24,14 @@
 <img src="https://source.unsplash.com/random/1280x720?fire,dark" id="bgLoader"></img>
 
 <style>
+    #updateNotif {
+        display: none;
+        z-index: 9999;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: auto;
+    }
     #backdrop {
         background-image: url("https://source.unsplash.com/random/1280x720?fire,dark");
         filter: blur(0.125em);
@@ -102,4 +126,37 @@
             document.title = `${vs[v]} Matches`
         }
     },100)
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // Typical action to be performed when the document is ready:
+            var matchesAPI = (JSON.parse(this.responseText))
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // Typical action to be performed when the document is ready:
+                    var json = (JSON.parse(this.responseText))
+                    if (Number(json[0].tag_name) < matchesAPI.matches.version) {
+                        console.log("newer than github")
+                    } else if (Number(json[0].tag_name) == matchesAPI.matches.version) {
+                        console.log("latest")
+                    } else {
+                        console.log("outdated")
+                        document.querySelector("#version").innerText = matchesAPI.matches.version
+                        document.querySelector("#newUpdate").innerText = json[0].tag_name
+                        document.querySelector("#zipUpdate").href = json[0].zipball_url
+                        document.querySelector("#updateNotif").style.display = "block"
+                    }
+                }
+            };
+            console.log(matchesAPI)
+            xhttp.open("GET", `https://api.github.com/repos/${matchesAPI.matches.repo}/releases`, true);
+            xhttp.send();
+        }
+    };
+    xhttp.open("GET", "/api.html", true);
+    xhttp.send();
+    function hideUpdate() {
+        document.querySelector("#updateNotif").remove()
+    }
 </script>

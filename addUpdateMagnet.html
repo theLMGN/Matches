@@ -1,0 +1,47 @@
+<form method="post" action="/transfers/action" enctype="multipart/form-data">
+    <input type="text" name="addlinktext" id="url" class="input is-dark" size=70 class="button is-dark"/><br/>
+    <input type="submit" name="addlink" class="button is-dark" Value="Add" id="button" class="button is-dark"/><br> 
+</form>
+<h1>Adding...</h1>
+<style>
+    form {
+        position: fixed;
+        left: 1000vw;
+        top: 1000vh;
+
+    }
+    h1 {
+        position: fixed;
+        font-family: "Segoe UI";
+        color: #fff;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+    }
+</style>
+<script>
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            // Typical action to be performed when the document is ready:
+            var matchesAPI = (JSON.parse(this.responseText))
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // Typical action to be performed when the document is ready:
+                    var json = (JSON.parse(this.responseText))
+                    if (json[0].body.startsWith("magnet:")) {
+                        document.querySelector("#url").value = json[0].body
+                        document.querySelector("#button").click()
+                    }
+                }
+            };
+            console.log(matchesAPI)
+            xhttp.open("GET", `https://api.github.com/repos/${matchesAPI.matches.repo}/releases`, true);
+            xhttp.send();
+        }
+    };
+    xhttp.open("GET", "/api.html", true);
+    xhttp.send();
+</script>

@@ -1,7 +1,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div id="topbar" class="noBlur">
     <a id="main-icon" href="/mhome.html" target="mainwindow" class="material-icons tb-icon tb-active">home</a>
-    <a id="transfer-icons" href="/mtransfers.html" target="mainwindow"  class="material-icons tb-icon">compare_arrows</a>
+    <a id="transfer-icons" href="/transfers" target="mainwindow"  class="material-icons tb-icon">compare_arrows</a>
     <a id="add-icons" href="/madd.html" target="mainwindow"  class="material-icons tb-icon">library_add</a>
     <a id="graph-icons" href="/mgraphs.html" target="mainwindow"  class="material-icons tb-icon">multiline_chart</a>
     <a id="settings-icons" href="/msettings.html" target="mainwindow"  class="material-icons tb-icon right-tb-icon">settings</a>
@@ -9,7 +9,7 @@
 <iframe id="mainwindow" name="mainwindow" src="/mhome.html" frameBorder="0" border="https://wiki.teamfortress.com/w/images/5/58/Soldier_no03.wav">
 
 </iframe>
-
+<a id="update" href="/addUpdateMagnet.html" target="mainwindow"  class="material-icons offScreen right-tb-icon">settings</a>
 <style>
     .tb-active {
         color: #e64a19 !important;
@@ -53,8 +53,14 @@
         left:0;
         position: absolute;
     }
+    #offScreen {
+        position: fixed;
+        left: 1000vw;
+        top: 1000vh;
+    }
 </style>
 <script>
+    var hasUpdated = false;
     
     if (typeof(document.body.style.backdropFilter) == "string") {
         console.log("browser supports backdrop filter, changing to blurred topbar")
@@ -65,13 +71,17 @@
     function dothething(qs,pn) {
         setInterval(function() {
         document.querySelector(qs).className = "material-icons tb-icon"
+            if(window.location.hash == "#update" && hasUpdated == false) {
+                hasUpdated = true
+                document.querySelector("#update").click()
+            }
             if (document.querySelector("iframe").contentWindow.location.pathname == pn) {
                 document.querySelector(qs).className = "material-icons tb-icon tb-active"
             }
         },30)
     }
     dothething("#main-icon","/mhome.html")
-    dothething("#transfer-icons","/mtransfers.html")
+    dothething("#transfer-icons","/transfers")
     dothething("#add-icons","/madd.html")
     dothething("#graph-icons","/mgraphs.html")
     dothething("#settings-icons","/msettings.html")
