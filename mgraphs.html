@@ -1,8 +1,60 @@
-<h1>Coming soon</h1>
-<style>
-        body {
-            color: #fff;
-            font-family: "Segoe UI";
-            background: #252525;
-        }
-        </style>
+<html>
+        <head>
+          <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+          <script type="text/javascript">
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(startChar);
+            var deeta = [['Time', 'in', 'out']]
+            function startChar() {
+                function xhr() {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var json = JSON.parse(xhttp.responseText).bps
+                        console.log(json)
+                        json.in = json.in.replace(",","")
+                        json.out = json.out.replace(",","")
+                        console.log(json)
+                        if (json.in.includes("K")) {
+                            json.in = Number(json.in.replace(" K","")) * 1000
+                        }
+                        if (json.out.includes("K")) {
+                            json.out = Number(json.out.replace(" K","")) * 1000
+                        }
+                        console.log(json)
+                        deeta.push([(new Date()).toString(), Number(json.in),Number(json.out), ])
+                        drawChart()
+                    }
+                    };
+                    xhttp.open("GET", "/api.html", true);
+                    xhttp.send();
+                }
+                xhr()
+                setInterval(xhr,1000)
+            }
+            function drawChart() {
+              var data = google.visualization.arrayToDataTable(deeta);
+              var options = {
+                title: 'BPS',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+              };
+      
+              var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      
+              chart.draw(data, options);
+            }
+          </script>
+        </head>
+        <body>
+          <div id="curve_chart" style="width: 100%;height:100%;"></div>
+            <style>
+            #curve_chart > div > div:nth-child(1) > div > svg > rect {
+                fill: rgba(0,0,0,0);
+            }
+            #curve_chart {
+                filter: invert(100%);
+            }
+            </style>
+        </body>
+      </html>
