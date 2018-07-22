@@ -75,7 +75,7 @@
         100% { transform: rotate(360deg); }
     }
     .progress.is-downloading::-webkit-progress-value{ 
-        transition: 1s all;
+        transition: 1s all linear;
     }
     .is-fetching {
         background-color:#ffdd5755;
@@ -199,8 +199,33 @@ function xhr() {
                if (document.querySelector("#transfer" + transfer.guid)) {
                    document.querySelector("#transfer" + transfer.guid).querySelector("h1").innerText = transfer.name
                    document.querySelector("#transfer" + transfer.guid).querySelector("p").innerHTML = `<span class="material-icons">info</span> ${transfer.status} | <i class="material-icons">storage</i>  ${transfer.bytes} | <i class="material-icons">keyboard_arrow_down</i> ${transfer.bps.in}bps <i class="material-icons">keyboard_arrow_up</i> ${transfer.bps.out}bps`
-                   document.querySelector("#transfer" + transfer.guid).querySelector("progress").value = transfer.progress
+                   
+                   var split = transfer.bytes.split(" of ")
+                   var progress = 0
+                   var size = 0
+                   split[0]= split[0].replace(",","")
+                   split[0]= split[0].replace(",","")
+                   split[0]= split[0].replace(",","")
+                   split[0]= split[0].replace(",","")
+                   split[0]= split[0].replace(",","")
+                   split[0]= split[0].replace(",","")
+                   split[1] = split[1].replace(",","")
+                   split[1] = split[1].replace(",","")
+                   split[1] = split[1].replace(",","")
+                   split[1] = split[1].replace(",","")
+                   split[1] = split[1].replace(",","")
+                   console.log(split)
+                   if (split[0].includes("K")) {
+                    split[0] = Number( split[0].replace(" K","")) * 1000
+                    }
+                    if (split[1].includes("K")) {
+                        split[1] = Number(split[1].replace(" K","")) * 1000
+                    }
+                    console.log(split)
+                    document.querySelector("#transfer" + transfer.guid).querySelector("progress").max = split[1]
+                    document.querySelector("#transfer" + transfer.guid).querySelector("progress").value = split[0]
                    document.querySelector("#transfer" + transfer.guid).querySelector("progress").className = `progress is-${transfer.status.split(" ")[0].toLowerCase()}`
+                   
                } else {
                    create(transfer)
                }

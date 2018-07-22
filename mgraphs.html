@@ -13,7 +13,17 @@
                         var json = JSON.parse(xhttp.responseText).bps
                         console.log(json)
                         json.in = json.in.replace(",","")
+                        json.in = json.in.replace(",","")
+                        json.in = json.in.replace(",","")
+                        json.in = json.in.replace(",","")
+                        json.in = json.in.replace(",","")
+                        json.in = json.in.replace(",","")
                         json.out = json.out.replace(",","")
+                        json.out = json.out.replace(",","")
+                        json.out = json.out.replace(",","")
+                        json.out = json.out.replace(",","")
+                        json.out = json.out.replace(",","")
+
                         console.log(json)
                         if (json.in.includes("K")) {
                             json.in = Number(json.in.replace(" K","")) * 1000
