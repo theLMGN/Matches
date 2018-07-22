@@ -11,3 +11,5 @@
 3. Extract the zip
 4. Tixati Settings > Web Interface > Select Folder > Matches folder
 5. Click "Test in webbrowser"
+
+For notifications, the transfer page has to be open, and be running over HTTPS
