@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+<script src="https://cdn.rawgit.com/gravmatt/js-notify/master/notify.min.js"></script>
 <div id="thing">
 
         
@@ -196,6 +196,7 @@ function xhr() {
        var json = (JSON.parse(this.responseText))
        json.transfers.forEach(transfer => {
            if (transfer) {
+               notify()
                if (document.querySelector("#transfer" + transfer.guid)) {
                    document.querySelector("#transfer" + transfer.guid).querySelector("h1").innerText = transfer.name
                    document.querySelector("#transfer" + transfer.guid).querySelector("p").innerHTML = `<span class="material-icons">info</span> ${transfer.status} | <i class="material-icons">storage</i>  ${transfer.bytes} | <i class="material-icons">keyboard_arrow_down</i> ${transfer.bps.in}bps <i class="material-icons">keyboard_arrow_up</i> ${transfer.bps.out}bps`
@@ -222,6 +223,16 @@ function xhr() {
                         split[1] = Number(split[1].replace(" K","")) * 1000
                     }
                     console.log(split)
+                    var old = document.querySelector("#transfer" + transfer.guid).querySelector("progress").className.replace("progress is-","")
+                    var newS = transfer.status.split(" ")[0].toLowerCase()
+                    if (old == "downloading" && newS == "seeding") {
+                        notify('Download complete', {
+                            body: transfer.name,
+                            onclick: function(e) {console.log(e)}, // e -> Notification object
+                            onclose: function(e) {console.log(e)},
+                            ondenied: function(e) {console.log(e)}
+                        });
+                    }
                     document.querySelector("#transfer" + transfer.guid).querySelector("progress").max = split[1]
                     document.querySelector("#transfer" + transfer.guid).querySelector("progress").value = split[0]
                    document.querySelector("#transfer" + transfer.guid).querySelector("progress").className = `progress is-${transfer.status.split(" ")[0].toLowerCase()}`
