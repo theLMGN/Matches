@@ -12,4 +12,7 @@
 4. Tixati Settings > Web Interface > Select Folder > Matches folder
 5. Click "Test in webbrowser"
 
+
+[Report bug/feature request](https://github.com/theLMGN/Matches/issues/new)
+
 For notifications, the transfer page has to be open, and be running over HTTPS
