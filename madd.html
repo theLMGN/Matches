@@ -42,20 +42,23 @@ function doCORSRequest(url, printResult) {
 var magnets = []
 function search() {
     document.querySelector("#searchContainer").innerHTML = `<a class="button is-large is-dark">Loading</a><a class="button is-large is-dark is-loading"></a>`
-    doCORSRequest(`https://thepiratebay.org/search/${document.querySelector("#searchbox").value}/0/99/0`, function(response) {
+    doCORSRequest(`https://pirateproxy.gdn/search/${document.querySelector("#searchbox").value}/0/99/0`, function(response) {
         magnets = []
         document.querySelector("#searchContainer").innerHTML = "<br><br><br>"
         var html = document.createElement('html');
         html.innerHTML = response
         console.log(html)
         var results = html.querySelector("#searchResult > tbody")
+        if (!results) {
+           document.querySelector("#searchContainer").innerHTML = `${document.querySelector("#searchContainer").innerHTML} <a class="button is-large is-dark" >No torrents found :'(</a><br><br>`
+        }
         var actualResults = results.querySelectorAll("tr")
         var r = actualResults[0]
         var i = 0
         actualResults.forEach(function(r) {
             var a = r.children
             magnets.push(a[1].querySelectorAll("a")[1].href)
-            document.querySelector("#searchContainer").innerHTML = `${document.querySelector("#searchContainer").innerHTML} <a class="button is-large is-dark" href="javascript:setMagnet(${i})">${a[1].querySelector("div > a").innerText} (${a[2].innerText} Seeds, ${ a[3].innerText} Leaches, ${a[1].children[4].innerText})</a><br><br>`
+            document.querySelector("#searchContainer").innerHTML = `${document.querySelector("#searchContainer").innerHTML} <a class="button is-large is-dark" href="javascript:setMagnet(${i})">${a[1].querySelector("div > a").innerText} (${a[2].innerText}S, ${ a[3].innerText}L, ${a[1].children[4].innerText})</a><br><br>`
             i = magnets.length
         })
         
